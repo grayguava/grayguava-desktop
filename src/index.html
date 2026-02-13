@@ -1,10 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<script>
-location.replace("https://grayguava.qzz.io");
-</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrayGuava</title>
+
+<link rel="stylesheet" href="./app-assets/css/nav.css">
+<link rel="stylesheet" href="./app-assets/css/styles.css">
+
+<style>
+body{ visibility:hidden; }
+</style>
 </head>
-<body></body>
+
+<body>
+
+<header class="header-shell">
+  <div class="nav-strip"></div>
+  <div class="header-layer">
+    <div class="brand">
+      <img src="./app-assets/logo.png" alt="logo">
+    </div>
+  </div>
+</header>
+
+<main class="project-container">
+
+  <header class="project-header">
+    <h1 class="doto">Unable to open GrayGuava</h1>
+    <p class="subtitle">
+      The app could not be reached.
+    </p>
+    <div class="section-divider"></div>
+  </header>
+
+  <section class="section intro">
+    <p>
+      The application tried to contact the website but received no response.
+    </p>
+    <p>
+      Check your connection or network restrictions and try again.
+    </p>
+  </section>
+
+      <button class="button-primary" onclick="start()">Retry →</button>
+
+</main>
+
+<footer class="bottom-footer">
+  <span>© 2026 William | Built Deliberately</span>
+</footer>
+
+<script>
+const SITE = "https://grayguava.qzz.io";
+  
+async function reachable(timeout=4000){
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(), timeout);
+
+  try{
+    await fetch(SITE, { method:"HEAD", mode:"no-cors", signal:controller.signal });
+    clearTimeout(timer);
+    return true;
+  }catch{
+    return false;
+  }
+}
+
+async function start(){
+  document.body.style.visibility="hidden";
+
+  const ok = await reachable();
+
+  if(ok){
+    location.href = SITE;
+  }else{
+    document.body.style.visibility="visible";
+  }
+}
+
+start();
+</script>
+
+</body>
 </html>

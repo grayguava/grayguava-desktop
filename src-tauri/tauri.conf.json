@@ -24,12 +24,9 @@
     }
   },
 
-  "bundle": {
-    "active": true,
-    "resources": ["../src/offline.html"],
-    "targets": ["msi"],
-    "icon": [
-      "icons/icon.ico"
-    ]
+"bundle": {
+  "active": true,
+  "targets": ["msi"],
+  "icon": ["icons/icon.ico"]
   }
 }

@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Doto";
-  src: url("./assets/fonts/Doto-Black-Regular.woff2") format("woff2");
+  src: url("/app-assets/fonts/Doto-Black-Regular.woff2") format("woff2");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -12,8 +12,8 @@
 
 @font-face {
   font-family: "Space Grotesk";
-  src: url("./assets/fonts/SpaceGrotesk-Regular.ttf") format("truetype");
-  font-weight: 400;
+  src: url("/app-assets/fonts/SpaceGrotesk-Medium.ttf") format("truetype");
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
