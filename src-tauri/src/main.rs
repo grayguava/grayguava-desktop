@@ -1,6 +1,16 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{Manager, WebviewUrl, PageLoadEvent};
+use tauri::{Manager, WebviewUrl};
+use std::net::ToSocketAddrs;
+
+fn host_resolves(url: &str) -> bool {
+    if let Ok(parsed) = url::Url::parse(url) {
+        if let Some(host) = parsed.host_str() {
+            return (host, 443).to_socket_addrs().is_ok();
+        }
+    }
+    true
+}
 
 fn main() {
     tauri::Builder::default()
@@ -8,8 +18,8 @@ fn main() {
             let window = app.get_webview_window("main").unwrap();
             let handle = app.handle();
 
-            window.on_page_load(move |event| {
-                if let PageLoadEvent::Failed { .. } = event {
+            window.on_navigation(move |url| {
+                if !host_resolves(&url) {
                     let offline = tauri::path::resolve(
                         &handle.config(),
                         handle.package_info(),
@@ -17,10 +27,13 @@ fn main() {
                         Some(tauri::path::BaseDirectory::Resource),
                     ).unwrap();
 
-                    window.load_url(WebviewUrl::App(
+                    window.navigate(WebviewUrl::App(
                         offline.to_string_lossy().to_string()
-                    )).ok();
+                    ));
+
+                    return false;
                 }
+                true
             });
 
             Ok(())
