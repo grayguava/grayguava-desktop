@@ -1,34 +1,36 @@
-name: build-windows
+name: build-and-release
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    tags:
+      - "v*"
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@stable
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
 
-      - name: Build Tauri app
+      - name: Build MSI
         run: npx tauri build
 
-      - name: Upload installer
-        uses: actions/upload-artifact@v4
+      - name: Get version
+        id: version
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: grayguava-windows
-          path: src-tauri/target/release/bundle/msi/*.msi
+          files: src-tauri/target/release/bundle/msi/*.msi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -26,6 +26,7 @@
 
   "bundle": {
     "active": true,
+    "resources": ["../src/offline.html"],
     "targets": ["msi"],
     "icon": [
       "icons/icon.ico"
